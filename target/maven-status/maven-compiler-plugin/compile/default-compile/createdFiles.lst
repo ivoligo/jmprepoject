@@ -1,0 +1,10 @@
+exception\DBException.class
+service\UserService$1.class
+service\UserService$UserHolder.class
+servlets\DeleteServlet.class
+dao\UserDAO.class
+servlets\AddServlet.class
+servlets\EditServlet.class
+service\UserService.class
+servlets\ListServlet.class
+model\User.class
