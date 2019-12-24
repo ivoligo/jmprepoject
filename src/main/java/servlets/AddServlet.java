@@ -9,11 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-
-import exception.DBException;
 import model.User;
 import service.UserService;
-// почему он предлагает infomodel User
 
 @WebServlet("/add")
 public class AddServlet extends HttpServlet {
@@ -31,16 +28,21 @@ public class AddServlet extends HttpServlet {
         String password = req.getParameter("password");
         User user = new User(login, age, password);
         UserService userService = UserService.getInstance();
-        req.setAttribute("userLogin", login);
         try {
-            if (!userService.AddUser(user)) {
-                req.setAttribute("userID", userService.getUserIdByLogin(login));
+            if(userService.getUserIdByLogin(login) == 0){
+                userService.AddUser(user);
+                String path = req.getContextPath() + "/list";
+                resp.sendRedirect(path);
+            }
+            else {
+                resp.setContentType("text/html; charset=UTF-8");
+                PrintWriter wr = resp.getWriter();
+                wr.println("Пользователь существует");
+                wr.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        doGet(req, resp);
 
     }
 }

@@ -3,7 +3,6 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.User;
 
 public class UserDAO {
@@ -29,15 +28,10 @@ public class UserDAO {
         String login = null;
         int age = 0;
         String password = null;
-//        if (!rs.next()) {
-//            System.out.println("ResultSet is empty");
-//        } else {
-//            do {
         while (rs.next()){
                 login = rs.getString(2);
                 age = rs.getInt(3);
                 password = rs.getString(4);
-//            } while (rs.next());
         }
         User userById = new User(id, login, age, password);
         rs.close();
@@ -77,7 +71,6 @@ public class UserDAO {
         return userList;
     }
 
-    //remove
     public void removeUserByIdDao(long id) throws SQLException{
 
         PreparedStatement stmt = connection.prepareStatement("delete from users where id=?");
@@ -94,7 +87,6 @@ public class UserDAO {
         stmt.executeUpdate();
         stmt.close();
     }
-
 
     public void updateUserDAO(User user) throws SQLException {
 

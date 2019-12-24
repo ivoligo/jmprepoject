@@ -24,13 +24,6 @@
 <form action="list" >
     <input type="submit" value="Список пользователей">
 </form>
-<%
-    if (request.getAttribute("userLog") != null){
-        out.println("Пользователь с логином " + request.getAttribute("userLog") + " существует.");
-    }
-    if(request.getAttribute("userUpdate") != null){
-        out.print("Данные пользователя изменены");
-    }
-%>
+
 </body>
 </html>

@@ -1,9 +1,7 @@
 package servlets;
 
-import exception.DBException;
 import model.User;
 import service.UserService;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,17 +21,16 @@ public class EditServlet extends HttpServlet {
             long id = Long.parseLong(req.getParameter("id"));
             UserService userService = UserService.getInstance();
             User user;
-        try {
-            user = userService.getUserById(id);
-
-        req.setAttribute("userId", id);
-            req.setAttribute("userLogin", user.getLogin());
-            req.setAttribute("userAge", user.getAge());
-            req.setAttribute("userPassword", user.getPassword());
-            req.setAttribute("user", user);
-        } catch (SQLException e) {
+            try {
+                user = userService.getUserById(id);
+                req.setAttribute("userId", id);
+                req.setAttribute("userLogin", user.getLogin());
+                req.setAttribute("userAge", user.getAge());
+                req.setAttribute("userPassword", user.getPassword());
+                req.setAttribute("user", user);
+            } catch (SQLException e) {
             e.printStackTrace();
-        }
+            }
             RequestDispatcher requestDispatcher = req.getRequestDispatcher("views/edit.jsp");
             requestDispatcher.forward(req, resp);
     }
@@ -45,42 +42,26 @@ public class EditServlet extends HttpServlet {
         String login = req.getParameter("login");
         int age = Integer.parseInt(req.getParameter("age"));
         String password = req.getParameter("password");
-        //для вывода сообщения о том, что пользователь изменён
-
         UserService userService = UserService.getInstance();
-
         try {
            User user = userService.getUserById(id);
-           // login
-           if (!login.isEmpty() && !(login.equals(userService.getUserByLogin(login).getLogin()))) {
+           if (!(login.equals(userService.getUserByLogin(login).getLogin()))) {
                    user.setLogin(login);
-           } else if (login.equals(userService.getUserByLogin(login).getLogin()) && (id != userService.getUserByLogin(login).getId())) {
-               req.setAttribute("userLog", login);
-//               doGet(req, resp);
-            }
-           //age
-           if (!req.getParameter("age").isEmpty()) {
-               user.setAge(age);
+           } else {
+               resp.setContentType("text/html; charset=UTF-8");
+               PrintWriter wr = resp.getWriter();
+               wr.println("Пользователь существует");
+               wr.close();
            }
-           //password
-           if (!password.isEmpty()) {
-               user.setPassword(password);
+           user.setAge(age);
+           user.setPassword(password);
+           if (!(login.equals(userService.getUserByLogin(login).getLogin()))) {
+               userService.updateUser(user);
+               String path = req.getContextPath() + "/list";
+               resp.sendRedirect(path);
            }
-
-           if (userService.updateUser(user) && id == userService.getUserByLogin(login).getId()) {
-                   req.setAttribute("userUpdate", user.getId());
-
-           }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //ошибка вылетает, но всё работает. что за хрень? + 55 + 76 строка
-//       doGet(req,resp);
-//        String path = req.getContextPath() + "/list";
-//        resp.sendRedirect(path);
-        doGet(req, resp);
     }
-
 }

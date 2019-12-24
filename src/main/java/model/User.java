@@ -12,19 +12,10 @@ public class User {
     public User() {
     }
 
-    public User(String login,   String password) {
-        this.login = login;
-        this.password = password;
-    }
     public User(String login, int age,  String password) {
         this.login = login;
         this.age = age;
         this.password = password;
-    }
-    public User(Long id, String login, int age) {
-        this.id = id;
-        this.login = login;
-        this.age = age;
     }
 
     public User(Long id, String login, int age,  String password) {
@@ -61,11 +52,11 @@ public class User {
     public int getAge(){
         return age;
     }
+
     public void setAge(int age){
         this.age = age;
     }
 
-    //влияет на лист, но можно по другому: добавив list<String>
     @Override
     public String toString() {
         return "User{" +
@@ -82,10 +73,15 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
 
         User user = (User) o;
-
-        if (age != user.age) return false;
-        if (!Objects.equals(id, user.id)) return false;
-        if (!Objects.equals(login, user.login)) return false;
+        if (age != user.age) {
+            return false;
+        }
+        if (!Objects.equals(id, user.id)){
+            return false;
+        }
+        if (!Objects.equals(login, user.login)){
+            return false;
+        }
         return Objects.equals(password, user.password);
     }
 
